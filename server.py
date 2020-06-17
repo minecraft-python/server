@@ -1,5 +1,6 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from io import BytesIO
+import ssl
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
@@ -21,4 +22,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
 
 httpd = HTTPServer(('localhost', 8000), SimpleHTTPRequestHandler)
+
+httpd.socket = ssl.wrap_socket(
+    httpd.socket,
+    keyfile="path/tp/key.pem",
+    certfile='path/to/cert.pem',
+    server_side=True
+)
+
 httpd.serve_forever()
